@@ -1,0 +1,176 @@
+<div class="header">
+  <h3 class="text-muted">Unofficial Global Administrative Areas API</h3>
+</div>
+
+<div class="row marketing">
+  <p>
+  API exposing a postgis database loaded with <a href="http://gadm.org/">Global Administrative Areas</a> database.
+  </p>
+  <hr>
+
+<div class="row marketing">
+<!-- Single button -->
+
+<h4 id="layer_feature"><span class="label label-default">GET</span> <strong>/layer_feature</strong>: Layer features from the shape file</h4>
+  <br>
+Filters:
+<center>
+<button type="button" class="btn btn-success btn-lg" ng-click="new_filter()">
+  Add filter
+</button>
+</center>
+<div ng-repeat="attr in filter_attrs.filters">
+
+  <hr>
+
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon">Field</span>
+    <select class="form-control" ng-model="attr.name" ng-options="f as f for f in fields">
+    </select>
+  </div>
+
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon">Operator</span>
+    <select class="form-control" ng-model="attr.op">
+      <option value="!=">!=</option>
+      <option value="==">==</option>
+      <option value=">">></option>
+      <option value="<"><</option>
+      <option value="<="><=</option>
+      <option value=">=">>=</option>
+      <option value="has">has</option>
+      <option value="any">any</option>
+      <option value="like">like</option>
+    </select>
+  </div>
+
+  <div class="input-group input-group-lg" max-length="3">
+    <span class="input-group-addon">Value</span>
+    <input type="text" class="form-control" ng-model="attr.val">
+  </div>
+
+  <center>
+
+  <button type="button" class="btn btn-info" ng-click="remove_filter($index)">
+    Remove
+  </button>
+  </center>
+
+</div>
+
+</div>
+
+<div>
+  Sort by:
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon">Sort by</span>
+    <select class="form-control" ng-model="filter_attrs.order_by[0].field" ng-options="f as f for f in fields">
+    </select>
+    <select class="form-control" ng-model="filter_attrs.order_by[0].direction">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
+
+  <hr>
+  Query:
+  <pre>http://{{domain}}/api/v1/layer_feature?page=1&q={{filter_attrs}}</pre>
+
+  Query parameters:
+<pre>{{filter_attrs|json}}</pre>
+
+</div>
+
+<center>
+<button type="button" class="btn btn-success btn-lg" ng-click="execute1()">
+  Execute
+</button>
+</center>
+
+
+Results (Click objects to expand results):
+
+<json-formatter json="res1" open="1"></json-formatter>
+
+<br>
+Map:
+
+<div class="alert alert-warning" ng-if="!res1.num_results">
+  Please execute a query to show map.
+</div>
+
+<div class="alert alert-warning" ng-if="!google_defined">
+  Google maps did not load properly.
+</div>
+
+<div ng-if="google_defined && res1.num_results">
+  <gmap-locations-map
+  locations="res1"
+  click-function="alert('OK')"
+  >
+  </gmap-area-heat-map>
+  <br>
+</div>
+
+<hr>
+
+<h4 id="layer_feature_proximity"><span class="label label-default">GET</span> <strong>/layer_feature/x/{x}/y/{4/r/{r}</strong>: Filter locations around a geopoint (x, y) using radius r (In meters).</h4>
+  <br>
+
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon">X (Longitude)</span>
+    <input type="text" class="form-control" ng-model="x">
+  </div>
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon">Y (Latitude)</span>
+    <input type="text" class="form-control" ng-model="y">
+  </div>
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon">R (Meters)</span>
+    <input type="text" class="form-control" ng-model="r">
+  </div>
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon">M (Max results > 1000)</span>
+    <input type="text" class="form-control" ng-model="m">
+  </div>
+
+  <hr>
+  Query:
+  <pre>http://{{domain}}/api/v1/layer_feature/x/{{x}}/y/{{y}}/r/{{r}}/m/{{m}}</pre>
+
+<center>
+<button type="button" class="btn btn-success btn-lg" ng-click="execute2()">
+  Execute
+</button>
+</center>
+
+Results (Click objects to expand results):
+
+<json-formatter json="res2" open="1"></json-formatter>
+
+<br>
+Map:
+
+<div class="alert alert-warning" ng-if="!res2.num_results">
+  Please execute a query to show map.
+</div>
+
+<div class="alert alert-warning" ng-if="!google_defined">
+  Google maps did not load properly.
+</div>
+
+<div ng-if="google_defined && res2.num_results">
+  <gmap-locations-map
+  locations="res2"
+  click-function="alert('OK')"
+  >
+  </gmap-area-heat-map>
+  <br>
+</div>
+
+<br>
+<br>
+
+<div class="footer">
+  <p>Unofficial Global Administrative Areas API</p>
+</div>
