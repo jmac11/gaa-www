@@ -5,7 +5,7 @@ angular.module('wwwApp')
 
     $scope.google_defined = typeof(google) != 'undefined';
 
-    $scope.domain = 'http://gaa.propertyharbor.com'
+    $scope.domain = 'gaa.propertyharbor.com'
 
     $scope.fields = [
       'CC_1',
